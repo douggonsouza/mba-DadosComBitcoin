@@ -26,3 +26,5 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+// https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js
