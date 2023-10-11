@@ -40,29 +40,28 @@ class SendEmail extends Command
      */
     public function handle()
     {
-      $assets = new Assets();
-      $higher = $assets->higherPrice(5.5, 13000);
-      $user   = new AssetUsers($_POST);
-      $all    = $user::all()->toArray();
+      $assets     = new Assets();
+      $below      = $assets->belowLimit(5.5, 130000);
+      $user       = new AssetUsers($_POST);
+      $all        = $user::all()->toArray();
+      $listassets = [];
 
-      if(count($higher) <= 0){
-        echo("\nNão foram encontrados ativos.\n");
+      if(count($below) <= 0){
+        echo("\nNão foram encontrados ativos nas condições desejadas.\n");
         return 0;
       }
 
-      foreach($higher as $asset){
-        if(count($all) <= 0){
-          echo("\nNão foram encontrados usuários.\n");
-          return 0;
-        }
+      // list assets
+      foreach($below as $asset){
+        $listassets[] = $asset->name;
+      }
 
-        foreach($all as $email){
-          if(!$this->send($email['name'], $email['e-mail'], $asset->name)){
-            echo(sprintf("\nNão foi enviado e-mail de Notificação para o usuário '%s'.\n", $email['name']));
-            return 0;
-          };
-          echo(sprintf("\nEnviado e-mail de Notificação para o usuário '%s'.\n", $email['name']));
-        }
+      foreach($all as $email){
+        if(!$this->send($email['name'], $email['email'], implode(', ',$listassets))){
+          echo(sprintf("\nNão foi enviado e-mail de Notificação para o usuário '%s'.\n", $email['name']));
+          return 0;
+        };
+        echo(sprintf("\nEnviado e-mail de Notificação para o usuário '%s'.\n", $email['name']));
       }
 
       return 0;

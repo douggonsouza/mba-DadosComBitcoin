@@ -14,7 +14,7 @@ class AssetUsers extends Model
     protected $visible = [
       'id',
       'name',
-      'e-mail',
+      'email',
       'active',
       'updated_at',
       'created_at',
@@ -23,7 +23,7 @@ class AssetUsers extends Model
 
     protected $fillable = [
       'name',
-      'e-mail',
+      'email',
       'updated_at',
       'created_at'
     ];

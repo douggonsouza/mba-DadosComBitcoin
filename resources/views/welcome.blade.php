@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Coincap</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -117,15 +117,15 @@
                             <div class="ml-12">
                               <form method="post" action="">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <p>Registre-se abaixo e começe a receber um e-mail toda vez que um ativo ultrapassar o valor de R$ 130.000,00</p>
+                                <p>Registre-se abaixo e começe a receber um e-mail toda vez que um ativo estiver abaixo de R$ 130.000,00 (Cento e Trinta Mil Reais)</p>
                                 <div class="form-group">
                                   <label for="name">Nome</label>
                                   <input type="text" class="form-control" id="name" name="name" placeholder="nome completo...">
                                 </div></br>
 
                                 <div class="form-group">
-                                  <label for="e-mail">E-mail</label>
-                                  <input type="email" class="form-control" id="e-mail" name="e-mail" placeholder="e-mail...">
+                                  <label for="email">E-mail</label>
+                                  <input type="email" class="form-control" id="email" name="email" placeholder="e-mail...">
                                 </div></br>
 
                                 <button type="submit" class="btn btn-primary">Registrar</button>

@@ -15,7 +15,7 @@ class Assets extends Model
     protected $visible = [
       'id',
       'code',
-      'rank',
+      'ranking',
       'symbol',
       'name',
       'supply',
@@ -35,7 +35,7 @@ class Assets extends Model
 
     protected $fillable = [
       'code',
-      'rank',
+      'ranking',
       'symbol',
       'name',
       'supply',
@@ -66,13 +66,13 @@ class Assets extends Model
           af.flPriceUsd,
           a.*
         FROM
-          dev_xavier.assets a
+          assets a
           JOIN (
             SELECT
               CAST(af.priceUsd AS DECIMAL(16, 6)) flPriceUsd,
               af.id
             FROM
-              dev_xavier.assets af
+              assets af
             WHERE
               af.active = 1
           ) af ON af.id = a.id
@@ -82,7 +82,7 @@ class Assets extends Model
             SELECT
               ad.day
             FROM
-              dev_xavier.assets ad
+              assets ad
             WHERE
               ad.active = 1
             ORDER BY
@@ -104,13 +104,13 @@ class Assets extends Model
           a.name,
           a.day
         FROM
-          dev_xavier.assets a
+          assets a
           JOIN (
             SELECT
               CAST(af.priceUsd AS DECIMAL(16, 6)) flPriceUsd,
               af.id
             FROM
-              dev_xavier.assets af
+              assets af
             WHERE
               af.active = 1
           ) af ON af.id = a.id
@@ -124,7 +124,7 @@ class Assets extends Model
       ));
     }
 
-    public function higherPrice($cota, $limit)
+    public function belowLimit($cota, $limit, $code = null)
     {
       // DB::enableQueryLog();
       $sd = DB::select(sprintf(
@@ -133,25 +133,25 @@ class Assets extends Model
           af.ctPriceUsd,
           a.*
         FROM
-          dev_xavier.assets a
+          assets a
           JOIN (
             SELECT
               CAST(af.priceUsd AS DECIMAL(16, 6)) flPriceUsd,
               (CAST(af.priceUsd AS DECIMAL(16, 6)) * %d) ctPriceUsd,
               af.id
             FROM
-              dev_xavier.assets af
+              assets af
             WHERE
               af.active = 1
           ) af ON af.id = a.id
         WHERE
           a.active = 1
-          AND af.ctPriceUsd >= %d
+          AND af.ctPriceUsd < %d %s
           AND a.day = (
             SELECT
               ad.day
             FROM
-              dev_xavier.assets ad
+              assets ad
             WHERE
               ad.active = 1
             ORDER BY
@@ -160,9 +160,10 @@ class Assets extends Model
               1
           )
         ORDER BY a.day DESC, af.flPriceUsd DESC, a.code
-        LIMIT 10;',
+        LIMIT 5;',
         $cota,
-        $limit
+        $limit,
+        !is_null($code)? "AND a.code = '$code'": null
       ));
       // die(var_dump(DB::getQueryLog()));
       return $sd;
